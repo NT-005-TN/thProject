@@ -48,3 +48,21 @@ com.example.carparts
     ├── AddPartActivity.kt
     └── EditPartActivity.kt
 
+
+res/layout/
+├── activity_main.xml
+├── activity_add_car.xml
+├── activity_edit_car.xml
+├── activity_car_details.xml
+├── activity_add_part.xml
+├── activity_edit_part.xml
+├── item_car.xml
+└── item_part.xml
+
+
+
+res/values/
+├── strings.xml
+├── colors.xml
+└── themes.xml
+
