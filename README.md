@@ -47,4 +47,4 @@ com.example.carparts
     ├── CarDetailsActivity.kt
     ├── AddPartActivity.kt
     └── EditPartActivity.kt
-    ```
+
