@@ -1,3 +1,4 @@
+```
 com.example.carparts
 ├── adapter
 │   ├── CarAdapter.kt
@@ -46,4 +47,4 @@ com.example.carparts
     ├── CarDetailsActivity.kt
     ├── AddPartActivity.kt
     └── EditPartActivity.kt
-    
+    ```
