@@ -8,6 +8,7 @@ interface EditCarContract {
         fun showCar(car: Car)
         fun showSuccess()
         fun showError(message: String)
+        fun finish()
     }
 
     interface Presenter {

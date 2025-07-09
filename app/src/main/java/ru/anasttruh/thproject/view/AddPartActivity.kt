@@ -4,8 +4,8 @@ import ru.anasttruh.thproject.data.model.Part
 import ru.anasttruh.thproject.data.db.AppDatabase
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.carparts.databinding.ActivityAddPartBinding
 import kotlinx.coroutines.*
+import ru.anasttruh.thproject.databinding.ActivityAddPartBinding
 
 class AddPartActivity : AppCompatActivity() {
 

@@ -2,10 +2,10 @@ package ru.anasttruh.thproject.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.carparts.databinding.ActivityEditCarBinding
 import kotlinx.coroutines.*
 import ru.anasttruh.thproject.data.db.AppDatabase
 import ru.anasttruh.thproject.data.model.Car
+import ru.anasttruh.thproject.databinding.ActivityEditCarBinding
 
 class EditCarActivity : AppCompatActivity() {
 

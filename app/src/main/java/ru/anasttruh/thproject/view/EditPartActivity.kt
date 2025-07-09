@@ -2,10 +2,10 @@ package ru.anasttruh.thproject.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.carparts.databinding.ActivityEditPartBinding
 import kotlinx.coroutines.*
 import ru.anasttruh.thproject.data.db.AppDatabase
 import ru.anasttruh.thproject.data.model.Part
+import ru.anasttruh.thproject.databinding.ActivityEditPartBinding
 
 class EditPartActivity : AppCompatActivity() {
 
@@ -43,9 +43,12 @@ class EditPartActivity : AppCompatActivity() {
             part?.let {
                 CoroutineScope(Dispatchers.IO).launch {
                     partDao.delete(it)
-                    finish()
+                    withContext(Dispatchers.Main) {
+                        finish()
+                    }
                 }
             }
         }
+
     }
 }

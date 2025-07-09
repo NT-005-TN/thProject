@@ -3,33 +3,43 @@ package ru.anasttruh.thproject.presenter
 import kotlinx.coroutines.*
 import ru.anasttruh.thproject.contract.CarDetailsContract
 import ru.anasttruh.thproject.data.db.PartDao
+import ru.anasttruh.thproject.data.model.Part
+import ru.anasttruh.thproject.view.CarDetailsActivity
+import ru.anasttruh.thproject.view.CarDetailsView
 
 class CarDetailsPresenter(
-    private val view: CarDetailsContract.View,
+    private val view: CarDetailsView,
     private val partDao: PartDao,
     private val carId: Long
 ) : CarDetailsContract.Presenter {
 
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     override fun loadParts() {
-        view.observeParts(partDao.getByCarId(carId)) // LiveData
+        scope.launch {
+            val parts = partDao.getPartsByCarId(carId) // suspend функция
+            withContext(Dispatchers.Main) {
+                view.showParts(parts)
+            }
+        }
     }
 
-    override fun onAddPartClick() {
+    override fun onAddPartClicked() {
         view.navigateToAddPart(carId)
     }
 
-    override fun onEditPartClick(part: ru.anasttruh.thproject.data.model.Part) {
+    override fun onEditPartClicked(part: Part) {
         view.navigateToEditPart(part)
     }
 
-    override fun onDeletePartClick(part: ru.anasttruh.thproject.data.model.Part) {
+    override fun onDeletePartClicked(part: Part) {
         scope.launch {
-            withContext(Dispatchers.IO) {
-                partDao.delete(part)
-            }
+            partDao.delete(part)
         }
+    }
+
+    override fun onPartSelected(part: Part) {
+        view.showPartDetails(part)
     }
 
     override fun onDestroy() {

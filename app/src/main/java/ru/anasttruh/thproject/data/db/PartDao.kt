@@ -9,6 +9,9 @@ interface PartDao {
     @Query("SELECT * FROM parts WHERE carId = :carId")
     fun getByCarId(carId: Long): LiveData<List<Part>>
 
+    @Query("SELECT * FROM parts WHERE carId = :carId")
+    suspend fun getPartsByCarId(carId: Long): List<Part>
+
     @Insert
     suspend fun insert(part: Part)
 

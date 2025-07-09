@@ -3,9 +3,9 @@ package ru.anasttruh.thproject.util
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.example.carparts.R
 import java.util.*
 
 object NotificationHelper {
@@ -28,6 +28,14 @@ object NotificationHelper {
     fun showWearWarning(context: Context, carName: String, partName: String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Разрешение не получено — можно запросить его, если вы в Activity
+                // Но в BroadcastReceiver или Worker — запрос невозможен
+                return
+            }
+        }
+
         val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -37,10 +45,11 @@ object NotificationHelper {
         )
 
         val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification) // замените на свой иконку
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
             .setContentTitle("Важно: $carName")
             .setContentText("Деталь \"$partName\" сильно изношена. Нужна замена.")
-            .setStyle(NotificationCompat.BigTextStyle().bigText("Деталь \"$partName\" в автомобиле \"$carName\" достигла предела износа и должна быть заменена."))
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("Деталь \"$partName\" в автомобиле \"$carName\" достигла предела износа и должна быть заменена."))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

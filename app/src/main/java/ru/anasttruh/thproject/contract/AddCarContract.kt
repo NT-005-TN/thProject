@@ -4,6 +4,7 @@ interface AddCarContract {
     interface View {
         fun showSuccess()
         fun showError(message: String)
+        fun finish()
     }
 
     interface Presenter {

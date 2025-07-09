@@ -1,18 +1,19 @@
 package ru.anasttruh.thproject.view
 
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.carparts.R
-import com.example.carparts.databinding.ActivityMainBinding
 import ru.anasttruh.thproject.adapter.CarAdapter
+import ru.anasttruh.thproject.contract.MainContract
 import ru.anasttruh.thproject.data.db.AppDatabase
 import ru.anasttruh.thproject.data.model.Car
+import ru.anasttruh.thproject.databinding.ActivityMainBinding
 import ru.anasttruh.thproject.presenter.MainPresenter
+import ru.anasttruh.thproject.service.ReminderService
+import ru.anasttruh.thproject.util.NotificationHelper
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity(), MainContract.View {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var presenter: MainPresenter
@@ -29,15 +30,15 @@ class MainActivity : AppCompatActivity(), MainView {
         )
 
         adapter = CarAdapter(
-            onItemClick = { presenter.onCarSelected(it) },
+            onItemClick = { presenter.onCarSelected(it.id) },
             onEditClick = { presenter.onEditCarClicked(it) },
             onDeleteClick = { presenter.onDeleteCarClicked(it) }
         )
 
-        binding.recyclerCars.layoutManager = LinearLayoutManager(this)
-        binding.recyclerCars.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
 
-        binding.fabAddCar.setOnClickListener {
+        binding.floatingActionButton.setOnClickListener {
             presenter.onAddCarClicked()
         }
 
@@ -59,14 +60,20 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun navigateToEditCar(car: Car) {
-        val intent = Intent(this, EditCarActivity::class.java)
-        intent.putExtra("CAR", car)
+        val intent = Intent(this, EditCarActivity::class.java).apply {
+            putExtra("CAR", car)
+        }
         startActivity(intent)
     }
 
     override fun navigateToCarDetails(carId: Long) {
-        val intent = Intent(this, CarDetailsActivity::class.java)
-        intent.putExtra("CAR_ID", carId)
+        val intent = Intent(this, CarDetailsActivity::class.java).apply {
+            putExtra("CAR_ID", carId)
+        }
         startActivity(intent)
+    }
+
+    override fun finish() {
+        super.finish()
     }
 }

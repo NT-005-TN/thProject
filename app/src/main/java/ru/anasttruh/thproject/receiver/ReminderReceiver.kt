@@ -19,9 +19,13 @@ class ReminderReceiver : BroadcastReceiver(), CoroutineScope {
         val partDao = db.partDao()
 
         launch {
-            val cars = carDao.getAllSnapshot() // получаем snapshot, а не LiveData
+            // Получаем список автомобилей (синхронно)
+            val cars = carDao.getAllCars()
+
             for (car in cars) {
-                val parts = partDao.getByCarIdSnapshot(car.id)
+                // Получаем детали для текущего автомобиля
+                val parts = partDao.getPartsByCarId(car.id)
+
                 for (part in parts) {
                     val wearRatio = part.hoursUsed.toFloat() / part.maxHours.toFloat()
                     if (wearRatio >= Constants.WEAR_THRESHOLD) {

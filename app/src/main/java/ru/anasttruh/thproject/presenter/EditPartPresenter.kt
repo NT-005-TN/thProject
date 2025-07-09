@@ -13,6 +13,11 @@ class EditPartPresenter(
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    override fun loadPart(part: Part) {
+        // Можно проигнорировать аргумент, так как часть уже передана через конструктор
+        view.showPart(part)
+    }
+
     override fun updatePart(name: String, used: Int, max: Int) {
         if (name.isBlank()) {
             view.showError("Название не может быть пустым")

@@ -7,6 +7,7 @@ interface EditPartContract {
         fun showPart(part: Part)
         fun showSuccess()
         fun showError(message: String)
+        fun finish()
     }
 
     interface Presenter {

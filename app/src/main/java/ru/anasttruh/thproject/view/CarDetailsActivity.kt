@@ -4,13 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.carparts.adapter.PartAdapter
-import com.example.carparts.databinding.ActivityCarDetailsBinding
-import com.example.carparts.presenter.CarDetailsPresenter
 import ru.anasttruh.thproject.adapter.PartAdapter
+import ru.anasttruh.thproject.presenter.CarDetailsPresenter
 import ru.anasttruh.thproject.data.db.AppDatabase
 import ru.anasttruh.thproject.data.model.Part
-import ru.anasttruh.thproject.presenter.CarDetailsPresenter
+import ru.anasttruh.thproject.databinding.ActivityCarDetailsBinding
 
 class CarDetailsActivity : AppCompatActivity(), CarDetailsView {
 
@@ -24,12 +22,11 @@ class CarDetailsActivity : AppCompatActivity(), CarDetailsView {
         setContentView(binding.root)
 
         val carId = intent.getLongExtra("CAR_ID", -1L)
+        if (carId == -1L) finish()
 
-        presenter = CarDetailsPresenter(
-            this,
-            AppDatabase.getInstance(this).partDao(),
-            carId
-        )
+        val partDao = AppDatabase.getInstance(this).partDao()
+
+        presenter = CarDetailsPresenter(this, partDao, carId)
 
         adapter = PartAdapter(
             onItemClick = { presenter.onPartSelected(it) },
@@ -37,14 +34,19 @@ class CarDetailsActivity : AppCompatActivity(), CarDetailsView {
             onDeleteClick = { presenter.onDeletePartClicked(it) }
         )
 
-        binding.recyclerParts.layoutManager = LinearLayoutManager(this)
-        binding.recyclerParts.adapter = adapter
+        binding.recyclerViewParts.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewParts.adapter = adapter
 
         binding.fabAddPart.setOnClickListener {
             presenter.onAddPartClicked()
         }
 
         presenter.loadParts()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.loadParts()  // обновляем список при возвращении на экран
     }
 
     override fun showParts(parts: List<Part>) {
@@ -58,12 +60,18 @@ class CarDetailsActivity : AppCompatActivity(), CarDetailsView {
     }
 
     override fun navigateToEditPart(part: Part) {
-        val intent = Intent(this, EditPartActivity::class.java)
-        intent.putExtra("PART", part)
+        val intent = Intent(this, EditPartActivity::class.java).apply {
+            putExtra("PART", part)
+        }
         startActivity(intent)
     }
 
     override fun showPartDetails(part: Part) {
-        // Здесь можно сделать диалог или страницу деталей
+        // Можно открыть диалог или новую активити
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 }

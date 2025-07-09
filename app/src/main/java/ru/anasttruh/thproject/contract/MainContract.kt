@@ -8,6 +8,7 @@ interface MainContract {
         fun navigateToAddCar()
         fun navigateToEditCar(car: Car)
         fun navigateToCarDetails(carId: Long)
+        fun finish()
     }
 
     interface Presenter {

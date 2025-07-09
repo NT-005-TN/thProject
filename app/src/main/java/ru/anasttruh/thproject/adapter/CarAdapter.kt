@@ -3,8 +3,13 @@ package ru.anasttruh.thproject.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
-import com.example.carparts.R
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import ru.anasttruh.thproject.R
+import android.widget.Button
 import ru.anasttruh.thproject.data.model.Car
 
 class CarAdapter(
@@ -23,20 +28,15 @@ class CarAdapter(
     }
 
     inner class CarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        private val carNameTextView: TextView = itemView.findViewById(R.id.text_car_name)
+        private val editButton: Button = itemView.findViewById(R.id.button_edit)
+
         fun bind(car: Car) {
-            itemView.text_car_name.text = car.name
+            carNameTextView.text = car.name
 
-            itemView.setOnClickListener {
-                onItemClick(car)
-            }
-
-            itemView.button_edit_car.setOnClickListener {
-                onEditClick(car)
-            }
-
-            itemView.button_delete_car.setOnClickListener {
-                onDeleteClick(car)
-            }
+            itemView.setOnClickListener { onItemClick(car) }
+            editButton.setOnClickListener { onEditClick(car) }
         }
     }
 

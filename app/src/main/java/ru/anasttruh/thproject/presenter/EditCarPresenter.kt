@@ -13,6 +13,11 @@ class EditCarPresenter(
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    override fun loadCar(car: Car) {
+        // Можно игнорировать аргумент, так как car уже передан через конструктор
+        view.showCar(car)
+    }
+
     override fun updateCar(name: String) {
         if (name.isBlank()) {
             view.showError("Название не может быть пустым")
